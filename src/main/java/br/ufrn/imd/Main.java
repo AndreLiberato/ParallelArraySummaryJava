@@ -1,24 +1,16 @@
 package br.ufrn.imd;
 
-import br.ufrn.imd.model.Element;
-import br.ufrn.imd.utils.RandomGenerator;
+import br.ufrn.imd.model.ParallelArraySummary;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Main {
 
-public class ParallelArraySummary {
-
-    public static void main( String[] args ) {
-
+    public static void main(String[] args) {
         final int N = 2;
-        final int size = (int) Math.pow(10, N);
 
-        List<Element> elements = new ArrayList<>();
-        for(int index = 0; index < size; index++){
-            elements.add(new Element(index, RandomGenerator.generateValue(), RandomGenerator.generateGroup()));
-        }
+        ParallelArraySummary parallelArraySummary = new ParallelArraySummary();
+        parallelArraySummary.loadElements(N);
 
-        elements.forEach(element -> System.out.println(element.toString()));
+        parallelArraySummary.getElements().forEach(element -> System.out.println(element.toString()));
 
     }
 }
