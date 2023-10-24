@@ -1,16 +1,20 @@
 package br.ufrn.imd;
 
-import br.ufrn.imd.utils.Processor;
+import br.ufrn.imd.model.Executor;
+import br.ufrn.imd.model.Result;
+import br.ufrn.imd.utils.Output;
 
 public class Main {
 
     public static void main(String[] args) {
         final int N = 2;
 
-        Processor p = new Processor();
+        Executor p = new Executor();
 
         p.loadElements(N);
 
-        p.resolve();
+        Result output = p.process();
+
+        Output.showResult(output);
     }
 }
