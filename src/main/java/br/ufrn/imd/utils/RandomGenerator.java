@@ -9,6 +9,6 @@ public class RandomGenerator {
     }
 
     public static double generateValue(){
-        return new Random().nextDouble() * 10d;
+        return new Random().nextDouble() * 10;
     }
 }
