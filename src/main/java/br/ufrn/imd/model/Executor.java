@@ -1,11 +1,12 @@
 package br.ufrn.imd.model;
 
+import br.ufrn.imd.utils.ResultProcessor;
 import br.ufrn.imd.utils.RandomGenerator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CyclicBarrier;
 
 public class Executor {
 
@@ -23,73 +24,49 @@ public class Executor {
         }
     }
 
-    public Result process(int numThreads) {
+    public Result process(int T){
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(T, () -> System.out.println("Operações Finalizadas... Formatando o resultado ....\n"));
+        List<IOperation> operations = new ArrayList<>(T);
+
+        startOperations(operations, cyclicBarrier, T);
+
+        try {
+            cyclicBarrier.await();
+        }catch (Exception ex){
+            System.err.println(ex.getMessage());
+        }
+
+        List<Result> results = operations.stream().map(IOperation::extractProcessing).toList();
+        return this.combineResults(results);
+    }
+
+    private void startOperations(List<IOperation> operations, CyclicBarrier cyclicBarrier, int T) {
         List<Element> elements = parallelArraySummary.getElements();
 
-        int elementsPerThreads = elements.size() / numThreads;
+        int chunkSize = elements.size() / T;
+        int extraElements = elements.size() % T;
+        int startIndex = 0;
 
-        int restElements = elements.size() % numThreads;
+        for (int i = 0; i < T; i++) {
+            int subListSize = chunkSize + (i < extraElements ? 1 : 0);
+            int endIndex = startIndex + subListSize;
 
-        int begin = 0;
-        int end = 0;
+            IOperation operation = new IOperationImpl(elements.subList(startIndex, endIndex), cyclicBarrier);
+            operations.add(operation);
 
-        List<List<Element>> subListOfElements = new ArrayList<List<Element>>();
-
-        for (int i = 0; i < elements.size() - restElements; i += elementsPerThreads) {
-            begin = i;
-            end = begin + elementsPerThreads;
-            subListOfElements.add(elements.subList(begin, end));
+            new Thread(operation).start();
+            startIndex = endIndex;
         }
-
-        List<Element> subListOfRestElements = new ArrayList<Element>(elements.subList(end, end + restElements));
-
-        List<Element> firstSubListCopy = new ArrayList<>(subListOfElements.get(0));
-        for (Element element : subListOfRestElements) {
-            firstSubListCopy.add(element);
-        }
-        subListOfElements.set(0, firstSubListCopy);
-
-        List<IOperation> operations = new ArrayList<IOperation>();
-        for (List<Element> listOfElements : subListOfElements) {
-            operations.add(new IOperationImpl(listOfElements));
-        }
-
-        List<Thread> threads = new ArrayList<Thread>();
-
-        for (IOperation operation : operations) {
-            threads.add(new Thread(operation));
-        }
-
-        for (Thread thread : threads) {
-            thread.start();
-        }
-
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        double sumTotal = 0.0;
-        List<Integer> lessThanFive = new ArrayList<Integer>();
-        List<Integer> greaterThanFive = new ArrayList<Integer>();
-        Map<Integer, Double> sumByGroup = new HashMap<Integer, Double>();
-
-        for (IOperation operation : operations) {
-            Result result = operation.gerPartialResult();
-            sumTotal += result.totalElements();
-            lessThanFive.addAll(result.idElementsLessThanFive());
-            greaterThanFive.addAll(result.idElementsGreaterOrEqualToFive());
-
-            for (Map.Entry<Integer, Double> entry : result.totalByGroup().entrySet()) {
-                int key = entry.getKey();
-                double value = entry.getValue();
-                sumByGroup.put(key, sumByGroup.getOrDefault(key, 0.0) + value);
-            }
-        }
-
-        return new Result(sumTotal, sumByGroup, lessThanFive, greaterThanFive);
     }
+
+
+    private Result combineResults(List<Result> results){
+        double sumTotal = ResultProcessor.sumListOfTotals(results.stream().map(Result::sumTotal).toList());
+        List<Integer> idsLessThanFive = ResultProcessor.extractIds(results.stream().map(Result::idsLessThanFive).toList());
+        List<Integer> idsGreaterOrEqualToFive = ResultProcessor.extractIds(results.stream().map(Result::idsGreaterOrEqualToFive).toList());
+        Map<Integer, Double> sumTotalsByGroup = ResultProcessor.sumListOfTotalsByGroup(results.stream().map(Result::sumTotalByGroup).toList());
+
+        return new Result(sumTotal, sumTotalsByGroup, idsLessThanFive, idsGreaterOrEqualToFive);
+    }
+
 }
