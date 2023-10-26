@@ -1,15 +1,19 @@
 package br.ufrn.imd.model;
 
+import java.util.List;
+import java.util.Map;
+
 public interface IOperation extends Runnable {
 
-    void sumTotal();
+    double sumTotal();
 
-    void sumTotalByGroup();
+    Map<Integer, Double> sumTotalByGroup();
 
-    void filterIdByTotalLessThanFive();
+    List<Integer> filterIdByTotalLessThanFive();
 
-    void filterIdByTotalGreaterThanFive();
+    List<Integer> filterIdByTotalGreaterThanFive();
 
-    Result gerPartialResult();
+    Result extractProcessing();
+
 
 }

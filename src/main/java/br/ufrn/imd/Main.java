@@ -7,8 +7,8 @@ import br.ufrn.imd.utils.Output;
 public class Main {
 
     public static void main(String[] args) {
-        final int N = 5;
-        final int numThreads = 20;
+        final int N = 2;
+        final int numThreads = 23;
 
         Executor p = new Executor();
 
