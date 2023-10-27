@@ -29,8 +29,6 @@ public class Executor {
             finalResult.print();
         });
 
-        List<OperationTask> tasks = new ArrayList<>();
-
         int chunkSize = elements.size() / T;
         int extraElements = elements.size() % T;
 
@@ -39,9 +37,7 @@ public class Executor {
             int end = start + (chunkSize - 1) + (i < extraElements ? 1:0);
 
             IOperation operation = new IOperationImpl(elements.subList(start, Math.min(end, elements.size())), finalResult);
-
             OperationTask operationTask = new OperationTask(cyclicBarrier, operation);
-            tasks.add(operationTask);
 
             new Thread(operationTask).start();
         }
