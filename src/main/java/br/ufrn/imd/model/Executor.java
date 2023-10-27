@@ -32,15 +32,15 @@ public class Executor {
         int chunkSize = elements.size() / T;
         int extraElements = elements.size() % T;
 
+        int start = 0;
         for (int i = 0; i < T; i++) {
-            int start = i * chunkSize;
-            int end = start + (chunkSize - 1) + (i < extraElements ? 1:0);
+            int end = start + chunkSize + (i < extraElements ? 1 : 0);
 
-            IOperation operation = new IOperationImpl(elements.subList(start, Math.min(end, elements.size())), finalResult);
+            IOperation operation = new IOperationImpl(elements.subList(start, end), finalResult);
             OperationTask operationTask = new OperationTask(cyclicBarrier, operation);
 
             new Thread(operationTask).start();
+            start = end;
         }
     }
-
 }
