@@ -22,11 +22,16 @@ public class Executor {
     }
 
     public void process(int T) throws RuntimeException {
+        long startProgram = System.currentTimeMillis();
+
         FinalResult finalResult = new FinalResult();
 
         CyclicBarrier cyclicBarrier = new CyclicBarrier(T, () -> {
             System.out.println("Operações Finalizadas... Formatando o resultado ....\n");
             finalResult.print();
+            
+            long endProgram = System.currentTimeMillis();
+            System.out.println("Tempo de execução em milisegundos: "+ (endProgram - startProgram));
         });
 
         int chunkSize = elements.size() / T;
