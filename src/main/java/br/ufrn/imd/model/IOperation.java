@@ -1,8 +1,5 @@
 package br.ufrn.imd.model;
 
-import java.util.List;
-import java.util.Map;
-
 public interface IOperation {
 
     void sumTotal();
