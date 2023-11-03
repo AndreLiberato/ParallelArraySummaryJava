@@ -12,6 +12,12 @@ public class Element {
         this.group = group;
     }
 
+    public Element() {
+        this.id = 0;
+        this.total = 0;
+        this.group = 0;
+    }
+
     public int getId() {
         return id;
     }
