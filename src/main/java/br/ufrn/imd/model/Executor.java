@@ -9,24 +9,39 @@ import java.util.concurrent.CyclicBarrier;
 public class Executor {
 
     private List<Element> elements;
+    private int N;
+    private int T;
+    private long processingTime;
 
-    public Executor() {
+    public Executor(int N, int T) {
         this.elements = new ArrayList<>();
+        this.N = N;
+        this.T = T;
+        this.processingTime = 0;
     }
 
-    public void loadElements(int N) {
-        final int size = (int) Math.pow(10, N);
+    public void loadElements() {
+        long startLoading = System.currentTimeMillis();
+
+        final long size = (long) Math.pow(10, N);
         for (int index = 0; index < size; index++) {
             this.elements.add(new Element(index, RandomGenerator.generateValue(), RandomGenerator.generateGroup()));
         }
+
+        long endLoading = System.currentTimeMillis();
+        processingTime = endLoading - startLoading;
     }
 
-    public void process(int T) throws RuntimeException {
+    public void process() throws RuntimeException {
+        long startProcess = System.currentTimeMillis();
+
         FinalResult finalResult = new FinalResult();
 
         CyclicBarrier cyclicBarrier = new CyclicBarrier(T, () -> {
-            System.out.println("Operações Finalizadas... Formatando o resultado ....\n");
-            finalResult.print();
+            long endProcess = System.currentTimeMillis();
+            processingTime = processingTime + (endProcess - startProcess);
+
+            showResult(finalResult, processingTime);
         });
 
         int chunkSize = elements.size() / T;
@@ -42,5 +57,13 @@ public class Executor {
             new Thread(operationTask).start();
             start = end;
         }
+    }
+
+    private void showResult(FinalResult finalResult, long processingTime) {
+        System.out.println("\nOperações Finalizadas... Formatando o resultado ....\n");
+        finalResult.print();
+
+        String output = String.format(">> Para um N = %d e um T = %d, o tempo de processamento foi de %d ms", N, T, processingTime);
+        System.out.println(output);
     }
 }

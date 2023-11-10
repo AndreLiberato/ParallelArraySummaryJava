@@ -40,11 +40,9 @@ public class FinalResult {
         System.out.println("\nSoma total por grupo:");
         this.sumTotalByGroup.forEach((key, value) -> System.out.println("Grupo " + key + ": " + value));
 
-        System.out.println("\nIds menores que 5 | Qtd.: "+idsLessThanFive.size()+" , são eles: ");
-        this.idsLessThanFive.forEach(id -> System.out.print(id + " "));
+        System.out.println("\nQtd. de Ids cujo total é menor que 5: "+idsLessThanFive.size()+".");
 
-        System.out.println("\nIds maiores ou igual que 5 | Qtd.: "+idsGreaterOrEqualToFive.size()+" , são eles: ");
-        this.idsGreaterOrEqualToFive.forEach(id -> System.out.print(id + " "));
+        System.out.println("\nQtd. de Ids cujo total é maior ou igual que 5: "+idsGreaterOrEqualToFive.size()+".\n");
     }
 
 }
