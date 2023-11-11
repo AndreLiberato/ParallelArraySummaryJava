@@ -1,15 +1,24 @@
 package br.ufrn.imd.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * A classe IOperationImpl implementa as operações definidas na interface IOperation.
+ */
 public class IOperationImpl implements IOperation {
 
-    private List<Element> elements;
-    private FinalResult finalResult;
+    private List<Element> elements;    // Lista de elementos para operações
+    private FinalResult finalResult;   // Resultado final acumulado das operações
 
+    /**
+     * Construtor da classe IOperationImpl.
+     *
+     * @param elements    Lista de elementos para operações.
+     * @param finalResult Resultado final acumulado das operações.
+     */
     public IOperationImpl(List<Element> elements, FinalResult finalResult) {
         this.elements = elements;
         this.finalResult = finalResult;
@@ -27,8 +36,8 @@ public class IOperationImpl implements IOperation {
 
     @Override
     public void sumTotalByGroup() {
-        Map<Integer, Double> sumTotalMap = new ConcurrentHashMap<>();
-        for(Element element : this.elements){
+        Map<Integer, Double> sumTotalMap = new HashMap<>();
+        for (Element element : this.elements) {
             double sumTotal = Objects.isNull(sumTotalMap.get(element.getGroup())) ? 0 : sumTotalMap.get(element.getGroup());
             sumTotalMap.put(element.getGroup(), sumTotal + element.getTotal());
         }
@@ -55,5 +64,4 @@ public class IOperationImpl implements IOperation {
         this.filterIdByTotalGreaterThanFive();
         this.sumTotalByGroup();
     }
-
 }
