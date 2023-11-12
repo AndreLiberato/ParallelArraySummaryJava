@@ -1,7 +1,7 @@
 # ParallelArraySummaryJava
 Implementação do projeto com java.
 
-# Como buildar
+## Como buildar
 
 ```
 mvn package
@@ -9,7 +9,7 @@ mvn package
 
 Esse comando criará um arquivo `.jar` no diretório `./target/ParallelArraySummary-1.0.jar`.
 
-# Como executar 
+## Como executar 
 
 ```
 java -cp ./target/ParallelArraySummary-1.0.jar br.ufrn.imd.Main [N] [T]
