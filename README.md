@@ -12,7 +12,7 @@ Esse comando criará um arquivo `.jar` no diretório `./target/ParallelArraySumm
 ## Como executar 
 
 ```
-java -cp ./target/ParallelArraySummary-1.0.jar br.ufrn.imd.Main [N] [T]
+java -jar ./target/ParallelArraySummary-1.0.jar [N] [T]
 ```
 
 Sendo `N` aplicado a 10^N elementos e `T` o número de threads criada.
