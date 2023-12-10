@@ -8,8 +8,8 @@ import java.util.*;
 public class FinalResult {
 
     private double sumTotal;                        // Soma total dos valores dos elementos
-    private Set<Integer> idsLessThanFive;           // Conjunto de identificadores cujo valor total é menor que cinco
-    private Set<Integer> idsGreaterOrEqualToFive;   // Conjunto de identificadores cujo valor total é maior ou igual a cinco
+    private long quantityLessThanFive;              // Número de identificadores cujo valor total é menor que cinco
+    private long quantityGreaterOrEqualToFive;      // Número de identificadores cujo valor total é maior ou igual a cinco
     private Map<Integer, Double> sumTotalByGroup;   // Soma total dos valores dos elementos por grupo
 
 
@@ -18,8 +18,6 @@ public class FinalResult {
      */
     public FinalResult() {
         this.sumTotalByGroup = new HashMap<>();
-        this.idsGreaterOrEqualToFive = new HashSet<>();
-        this.idsLessThanFive = new HashSet<>();
     }
 
     /**
@@ -44,21 +42,21 @@ public class FinalResult {
     }
 
     /**
-     * Atualiza o conjunto de identificadores cujo total é menor que cinco.
+     * Atualiza o contador de elementos cujo total é menor que cinco.
      *
-     * @param ids Lista de identificadores a serem adicionados ao conjunto.
+     * @param quantityBySublist quantidade a ser somada ao contador total.
      */
-    public synchronized void updateIdsLessThanFive(List<Integer> ids) {
-        idsLessThanFive.addAll(ids);
+    public synchronized void updateIdsLessThanFive(long quantityBySublist) {
+        quantityLessThanFive += quantityBySublist;
     }
 
     /**
-     * Atualiza o conjunto de identificadores cujo total é maior ou igual a cinco.
+     * Atualiza o contador de elementos cujo total é maior ou igual a cinco.
      *
-     * @param ids Lista de identificadores a serem adicionados ao conjunto.
+     * @param quantityBySublist quantidade a ser somada ao contador total.
      */
-    public synchronized void updateIdsGreaterOrEqualToFive(List<Integer> ids) {
-        idsGreaterOrEqualToFive.addAll(ids);
+    public synchronized void updateIdsGreaterOrEqualToFive(long quantityBySublist) {
+        quantityGreaterOrEqualToFive += quantityBySublist;
     }
 
     /**
@@ -70,8 +68,8 @@ public class FinalResult {
         System.out.println("\nSoma total por grupo:");
         this.sumTotalByGroup.forEach((key, value) -> System.out.println("Grupo " + key + ": " + value));
 
-        System.out.println("\nQtd. de Ids cujo total é menor que 5: " + idsLessThanFive.size() + ".");
+        System.out.println("\nQtd. de Ids cujo total é menor que 5: " + this.quantityLessThanFive + ".");
 
-        System.out.println("\nQtd. de Ids cujo total é maior ou igual a 5: " + idsGreaterOrEqualToFive.size() + ".\n");
+        System.out.println("\nQtd. de Ids cujo total é maior ou igual a 5: " + this.quantityGreaterOrEqualToFive + ".\n");
     }
 }
