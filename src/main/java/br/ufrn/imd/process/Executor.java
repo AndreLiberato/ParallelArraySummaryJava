@@ -1,8 +1,10 @@
 package br.ufrn.imd.model;
 
+import br.ufrn.imd.process.TaskOperator;
 import br.ufrn.imd.utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 
@@ -24,7 +26,7 @@ public class Executor {
      * @param T O número de threads para processamento paralelo.
      */
     public Executor(int N, int T) {
-        this.elements = new ArrayList<>();
+        this.elements = new LinkedList<>();
         this.N = N;
         this.T = T;
         this.runtime = 0;
@@ -94,7 +96,7 @@ public class Executor {
             int end = start + chunkSize + (i < extraElements ? 1 : 0);
 
             IOperation operation = new IOperationImpl(elements.subList(start, end), finalResult);
-            OperationTask operationTask = new OperationTask(cyclicBarrier, operation);
+            TaskOperator operationTask = new TaskOperator(cyclicBarrier, operation);
 
             new Thread(operationTask).start();
             start = end;
