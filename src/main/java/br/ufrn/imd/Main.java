@@ -1,6 +1,6 @@
 package br.ufrn.imd;
 
-import br.ufrn.imd.model.Executor;
+import br.ufrn.imd.process.Executor;
 
 /**
  * A classe responsável por iniciar a execução do Executor.

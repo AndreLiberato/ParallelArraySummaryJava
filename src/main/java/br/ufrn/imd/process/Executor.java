@@ -1,5 +1,7 @@
-package br.ufrn.imd.model;
+package br.ufrn.imd.process;
 
+import br.ufrn.imd.model.Element;
+import br.ufrn.imd.model.FinalResult;
 import br.ufrn.imd.utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -92,11 +94,9 @@ public class Executor {
         int start = 0;
         for (int i = 0; i < T; i++) {
             int end = start + chunkSize + (i < extraElements ? 1 : 0);
+            ProcessorSubset processorSubset = new ProcessorSubset(cyclicBarrier, elements.subList(start, end), finalResult);
+            new Thread(processorSubset).start();
 
-            IOperation operation = new IOperationImpl(elements.subList(start, end), finalResult);
-            OperationTask operationTask = new OperationTask(cyclicBarrier, operation);
-
-            new Thread(operationTask).start();
             start = end;
         }
     }
