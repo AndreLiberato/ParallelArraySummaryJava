@@ -94,9 +94,6 @@ public class Executor {
         int start = 0;
         for (int i = 0; i < T; i++) {
             int end = start + chunkSize + (i < extraElements ? 1 : 0);
-            //IOperation operation = new IOperationImpl(elements.subList(start, end), finalResult);
-            //TaskOperator operationTask = new TaskOperator(cyclicBarrier, operation);
-
             ProcessorSubset processorSubset = new ProcessorSubset(cyclicBarrier, elements.subList(start, end), finalResult);
             new Thread(processorSubset).start();
 

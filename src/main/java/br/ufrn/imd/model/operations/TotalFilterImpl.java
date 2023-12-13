@@ -14,19 +14,16 @@ public class TotalFilterImpl implements Operation {
 
     private List<Element> subset;        // Subconjunto de elementos a ser filtrado
     private FinalResult referenceResult; // Resultado final a ser atualizado com informações da filtragem
-    private boolean flag;                // Indicador para determinar o predicado de filtragem
 
     /**
      * Construtor da classe TotalFilterImpl.
      *
      * @param subset          Subconjunto de elementos a ser filtrado.
      * @param referenceResult Resultado final a ser atualizado com informações da filtragem.
-     * @param flag            Indicador para determinar o predicado de filtragem.
      */
-    public TotalFilterImpl(List<Element> subset, FinalResult referenceResult, boolean flag) {
+    public TotalFilterImpl(List<Element> subset, FinalResult referenceResult) {
         this.subset = subset;
         this.referenceResult = referenceResult;
-        this.flag = flag;
     }
 
     /**
@@ -35,13 +32,16 @@ public class TotalFilterImpl implements Operation {
      */
     @Override
     public void execute() {
-        Predicate<Element> predicate = flag ? element -> element.group() >= 5 : element -> element.group() < 5;
-        long quantity = subset.stream().filter(predicate).count();
-
-        if (flag) {
-            referenceResult.updateIdsGreaterOrEqualToFive(quantity);
-        } else {
-            referenceResult.updateIdsLessThanFive(quantity);
+        long totalGreaterOrEqualToFive = 0, totalLessThanFive = 0;
+        for(Element element : subset){
+            if (element.total() >= 5) {
+                totalGreaterOrEqualToFive+=1;
+            } else {
+                totalLessThanFive+=1;
+            }
         }
+
+        referenceResult.updateTotalGreaterOrEqualToFive(totalGreaterOrEqualToFive);
+        referenceResult.updateTotalLessThanFive(totalLessThanFive);
     }
 }

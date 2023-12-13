@@ -18,9 +18,9 @@ public class ProcessorSubset implements Runnable{
 
     private CyclicBarrier barrier;      // Barreira cíclica para sincronização de threads
     private List<Element> subset;       // Subconjunto a ser processado.
-    private FinalResult subSetResult;   //
+    private FinalResult subSetResult;
 
-    static final int NUMBER_OF_PARALLEL_OPERATIONS = 4;     // Número fixo de operações paralelas que serão executadas
+    static final int NUMBER_OF_PARALLEL_OPERATIONS = 3;     // Número fixo de operações paralelas que serão executadas
 
     /**
      * Construtor da classe ProcessorSubset.
@@ -63,8 +63,7 @@ public class ProcessorSubset implements Runnable{
         // Constrói cada operação paralela com uma instância específica de operação
         parallelOperations[0] = new ParallelOperation(new TotalSumImpl(subset, subSetResult), parallelBarrier);
         parallelOperations[1] = new ParallelOperation(new GroupFilter(subset, subSetResult), parallelBarrier);
-        parallelOperations[2] = new ParallelOperation(new TotalFilterImpl(subset, subSetResult, true), parallelBarrier);
-        parallelOperations[3] = new ParallelOperation(new TotalFilterImpl(subset, subSetResult, false), parallelBarrier);
+        parallelOperations[2] = new ParallelOperation(new TotalFilterImpl(subset, subSetResult), parallelBarrier);
 
         return parallelOperations;
     }

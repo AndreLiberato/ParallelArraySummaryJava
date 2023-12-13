@@ -46,7 +46,7 @@ public class FinalResult {
      *
      * @param quantityBySublist quantidade a ser somada ao contador total.
      */
-    public synchronized void updateIdsLessThanFive(long quantityBySublist) {
+    public synchronized void updateTotalLessThanFive(long quantityBySublist) {
         quantityLessThanFive += quantityBySublist;
     }
 
@@ -55,7 +55,7 @@ public class FinalResult {
      *
      * @param quantityBySublist quantidade a ser somada ao contador total.
      */
-    public synchronized void updateIdsGreaterOrEqualToFive(long quantityBySublist) {
+    public synchronized void updateTotalGreaterOrEqualToFive(long quantityBySublist) {
         quantityGreaterOrEqualToFive += quantityBySublist;
     }
 
